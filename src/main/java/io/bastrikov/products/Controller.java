@@ -4,6 +4,8 @@ import io.bastrikov.products.dao.ProductRepository;
 import io.bastrikov.products.models.Product;
 import io.bastrikov.products.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RestController
 public class Controller {
@@ -21,8 +23,11 @@ public class Controller {
     ProductService productService;
 
     @GetMapping("/find/{id}")
-    public Optional<Product> findById(@PathVariable int id) {
-        return productRepository.findById(id);
+    public ResponseEntity<Product> findById(@PathVariable int id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("no product with id:  " + id));
+        return new ResponseEntity<Product>(product, HttpStatus.OK);
+
     }
     @GetMapping("/find")
     public List<Product> findAll(){

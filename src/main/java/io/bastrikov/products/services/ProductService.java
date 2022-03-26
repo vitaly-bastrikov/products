@@ -2,6 +2,8 @@ package io.bastrikov.products.services;
 
 import io.bastrikov.products.dao.ProductRepository;
 import io.bastrikov.products.models.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import java.util.*;
 
 @Service
 public class ProductService {
+    Logger logger = LoggerFactory.getLogger(ProductService.class);
     @Autowired
     ProductRepository productRepository;
     List<String> categories = new ArrayList<>(Arrays.asList("food", "electronics", "clothes", "sports"));
@@ -29,5 +32,6 @@ public class ProductService {
         for(Product product: productList) {
             productRepository.save(product);
         }
+        logger.info("generating finished");
     }
 }
